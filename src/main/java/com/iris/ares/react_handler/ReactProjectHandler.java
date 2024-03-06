@@ -1,6 +1,5 @@
 package com.iris.ares.react_handler;
 
-
 import org.springframework.stereotype.Component;
 
 import java.io.*;
@@ -8,20 +7,16 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Properties;
 
-
 @Component
 public class ReactProjectHandler {
     private static final String LOCK_FILE = "react_project_created.lock";
-
     private static final String REACT_SCRIPT = "C:\\Program Files\\nodejs\\npx.cmd";
-
     public static void createReactProject() {
-
         if (lockFileExists()) {
             return;
         }
         try {
-            String directory = getProjectRootPath();
+            String directory = getValueFromEnv("PROJECT_ROOT_PATH");
             BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
             System.out.print("npx create-react-app : ");
             String projectName = reader.readLine();
@@ -35,16 +30,13 @@ public class ReactProjectHandler {
             while ((line = processReader.readLine()) != null) {
                 System.out.println(line);
             }
-            int exitCode = process.waitFor();
-            if (exitCode == 0) {
-                System.out.println("Le projet React '" + projectName + "' a été créé avec succès à l'emplacement : " + reactDirectory.getAbsolutePath());
-                createLockFile();
-                writeProjectDirectoryToFile(reactDirectory.getAbsolutePath()); // Écrire le chemin du répertoire dans un fichier
-            } else {
-                System.err.println("Erreur lors de la création du projet React.");
-            }
-        }  catch (Exception e) {
-                System.err.println("Erreur lors de la création ou vérification du projet React : " + e.getMessage());
+            process.waitFor();
+            System.out.println("Le projet React '" + projectName + "' a été créé avec succès à l'emplacement : " + reactDirectory.getAbsolutePath());
+            createLockFile();
+            writeProjectDirectoryToFile(reactDirectory.getAbsolutePath());
+
+        } catch (Exception e) {
+            System.err.println("Erreur lors de la création ou vérification du projet React : " + e.getMessage());
         }
     }
     private static boolean lockFileExists(){
@@ -64,14 +56,14 @@ public class ReactProjectHandler {
         }
     }
 
-    public static String getProjectRootPath() {
+    public static String getValueFromEnv(String key) {
         String projectRootPath = null;
         try (InputStream input = new FileInputStream(".env")) {
             Properties properties = new Properties();
             properties.load(input);
-            projectRootPath = properties.getProperty("PROJECT_ROOT_PATH");
+            projectRootPath = properties.getProperty(key);
             if (projectRootPath == null) {
-                System.err.println("PROJECT_ROOT_PATH n'est pas défini dans le fichier .env. Veuillez définir la propriété.");
+                System.err.println(key + " n'est pas défini dans le fichier .env. Veuillez définir la propriété.");
                 System.exit(1);
             }
         } catch (IOException e) {
@@ -79,5 +71,4 @@ public class ReactProjectHandler {
         }
         return projectRootPath;
     }
-
 }

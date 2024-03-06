@@ -2,9 +2,9 @@ package com.iris.ares.generator;
 
 import com.iris.ares.annotations.Armagedon;
 import com.iris.ares.annotations.GeneratedCRUD;
+import com.iris.ares.config.FreemarkerConfig;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
-import freemarker.template.TemplateExceptionHandler;
 import org.springframework.core.annotation.AnnotatedElementUtils;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.type.classreading.MetadataReader;
@@ -18,19 +18,18 @@ import java.util.*;
 import static com.iris.ares.generator.AppJSGenerator.generateAppJS;
 import static com.iris.ares.generator.ComponentGenerator.generateComponents;
 import static com.iris.ares.generator.LoginPageGenerator.generateLoginPage;
+import static com.iris.ares.react_handler.ReactProjectHandler.getValueFromEnv;
 
 public class CRUDGenerator {
     private static final String PGD_FILE = "PGD.txt";
     private static final String[] TEMPLATES = {"list.ftl", "add.ftl", "edit.ftl"};
     private static final String[] DIRECTORY_PREFIXES = {"list_", "add_", "edit_"};
+    private static final String PACKAGE_ROOT_PATH = getValueFromEnv("PACKAGE_ROOT_PATH");
     private static final String PAGES_DIRECTORY = "src/pages";
 
     public static void generateCRUDPages() {
         try {
-            Configuration cfg = new Configuration(Configuration.VERSION_2_3_31);
-            cfg.setClassForTemplateLoading(CSSGenerator.class, "/templates/CRUDTemplates");
-            cfg.setDefaultEncoding("UTF-8");
-            cfg.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
+            Configuration cfg = FreemarkerConfig.getConfig(CSSGenerator.class, "/templates/CRUDTemplates");
             Template[] templates = new Template[TEMPLATES.length];
             for (int i = 0; i < TEMPLATES.length; i++) {
                 templates[i] = cfg.getTemplate(TEMPLATES[i]);
@@ -62,7 +61,7 @@ public class CRUDGenerator {
         try {
             PathMatchingResourcePatternResolver scanner = new PathMatchingResourcePatternResolver();
             MetadataReaderFactory readerFactory = new SimpleMetadataReaderFactory(scanner);
-            String packageSearchPath = "classpath*:" + getPackageRootPath().replace('.', '/') + "/**/*.class";
+            String packageSearchPath = "classpath*:" + PACKAGE_ROOT_PATH.replace('.', '/') + "/**/*.class";
             org.springframework.core.io.Resource[] resources = scanner.getResources(packageSearchPath);
             for (org.springframework.core.io.Resource resource : resources) {
                 MetadataReader reader = readerFactory.getMetadataReader(resource);
@@ -108,7 +107,7 @@ public class CRUDGenerator {
             try (Writer writer = new FileWriter(file)) {
                 Map<String, Object> data = new HashMap<>();
                 // Retirer "com.aura.model." de className
-                String entityName = classInfo.className().replace(getPackageRootPath() + ".", "");
+                String entityName = classInfo.className().replace(PACKAGE_ROOT_PATH + ".", "");
                 data.put("entityName", entityName);
                 List<Map<String, String>> fieldList = new ArrayList<>();
                 for (FieldInfo fieldInfo : classInfo.fields()) {
@@ -146,21 +145,8 @@ public class CRUDGenerator {
             }
         }
     }
-    public static String getPackageRootPath() {
-        String projectRootPath = null;
-        try (InputStream input = new FileInputStream(".env")) {
-            Properties properties = new Properties();
-            properties.load(input);
-            projectRootPath = properties.getProperty("PACKAGE_ROOT_PATH");
-            if (projectRootPath == null) {
-                System.err.println("PACKAGE_ROOT_PATH n'est pas défini dans le fichier .env. Veuillez définir la propriété.");
-                System.exit(1);
-            }
-        } catch (IOException e) {
-            System.err.println("Erreur lors de la lecture du fichier .env : " + e.getMessage());
-        }
-        return projectRootPath;
-    }
+
+
     private record AnnotatedClassInfo(String className, List<FieldInfo> fields) {
     }
     private record FieldInfo(String name, String type) {

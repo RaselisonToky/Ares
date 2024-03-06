@@ -37,6 +37,7 @@ public class AppJSGenerator {
             imports.append("import Add").append(simplifiedEntityName).append(" from './pages/").append(simplifiedEntityName.toLowerCase()).append("/add_").append(simplifiedEntityName.toLowerCase()).append("/page';\n");
             imports.append("import Edit").append(simplifiedEntityName).append(" from './pages/").append(simplifiedEntityName.toLowerCase()).append("/edit_").append(simplifiedEntityName.toLowerCase()).append("/page';\n");
         }
+        imports.append("import Login from './pages/auth/signin/page';\n");
         return imports.toString();
     }
     private static String generateRoutes(List<String> entityNames) {
@@ -47,6 +48,7 @@ public class AppJSGenerator {
             routes.append("<Route path='/add_").append(simplifiedEntityName.toLowerCase()).append("' element={<Add").append(simplifiedEntityName).append(" />} />\n");
             routes.append("<Route path='/edit_").append(simplifiedEntityName.toLowerCase()).append("/:id' element={<Edit").append(simplifiedEntityName).append(" />} />\n");
         }
+        routes.append("<Route path='/login' element={<Login/>} />");
         return indent(routes.toString(), 18);
     }
     private static String extractManualRoutes(List<String> navigationLines) {

@@ -29,6 +29,8 @@ import java.util.Base64;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
+import static com.iris.ares.react_handler.ReactProjectHandler.getValueFromEnv;
+
 
 @Configuration
 @EnableWebSecurity
@@ -52,8 +54,11 @@ public class SpringSecurityConfig {
             .anonymous(AbstractHttpConfigurer::disable)
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth ->{
-                auth.requestMatchers("api/v1/auth/*/**").permitAll();
-                //auth.requestMatchers("/admin").hasAnyAuthority("ROLE_ADMIN");
+                String permitAllRequestMatcher = getValueFromEnv("PUBLIC_ENDPOINTS");
+                String[] endpoints = permitAllRequestMatcher.split(",");
+                for (String endpoint : endpoints) {
+                    auth.requestMatchers("api/v1/auth/*/**", endpoint.trim()).permitAll();
+                }
                 auth.anyRequest().authenticated();
             })
             .csrf(AbstractHttpConfigurer::disable)

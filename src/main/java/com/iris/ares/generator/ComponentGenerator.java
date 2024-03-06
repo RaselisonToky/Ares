@@ -1,5 +1,6 @@
 package com.iris.ares.generator;
 
+import com.iris.ares.config.FreemarkerConfig;
 import freemarker.cache.ClassTemplateLoader;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
@@ -14,10 +15,8 @@ public class ComponentGenerator {
     private static final String COMPONENTS_DIRECTORY = "src/components";
     public static void generateComponents(String reactProjectDirectory) {
         try {
-            Configuration cfg = new Configuration(Configuration.VERSION_2_3_31);
-            cfg.setTemplateLoader(new ClassTemplateLoader(ComponentGenerator.class, TEMPLATE_DIRECTORY));
-            cfg.setDefaultEncoding("UTF-8");
-            cfg.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
+            Configuration cfg = FreemarkerConfig.getConfig(ComponentGenerator.class, TEMPLATE_DIRECTORY);
+
             for (String templateName : TEMPLATE_NAMES) {
                 Template template = cfg.getTemplate(templateName);
                 String templateNameWithoutExtension = templateName.replaceFirst("[.][^.]+$", "");

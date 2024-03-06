@@ -8,11 +8,11 @@ import java.util.HashMap;
 
 public class LoginPageGenerator {
     private static final String TEMPLATE_NAME = "login.ftl";
-    private static final String PAGE_NAME = "login";
+    private static final String PAGE_NAME = "page";
     public static void generateLoginPage(String string) {
         try {
             Configuration cfg = FreemarkerConfig.getConfig(LoginPageGenerator.class, "/templates/Auth");
-            String output_directory = string + File.separator + "src/pages/auth";
+            String output_directory = string + File.separator + "src/pages/auth/signin";
 
             // Loading the template
             Template template = cfg.getTemplate(TEMPLATE_NAME);
