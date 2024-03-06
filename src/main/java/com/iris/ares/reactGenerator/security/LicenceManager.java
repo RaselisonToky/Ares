@@ -1,9 +1,6 @@
-package com.iris.ares.security;
+package com.iris.ares.reactGenerator.security;
 
-import com.iris.ares.generator.CRUDGenerator;
-import com.iris.ares.generator.CSSGenerator;
-import com.iris.ares.react_handler.ReactProjectHandler;
-import com.iris.ares.security.exception.LicenceInvalideException;
+import com.iris.ares.reactGenerator.security.exception.LicenceInvalideException;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,10 +15,9 @@ import java.util.Scanner;
 
 import javax.crypto.Cipher;
 
-import static com.iris.ares.generator.CRUDGenerator.generateCRUDPages;
-import static com.iris.ares.generator.CSSGenerator.generateCSSFile;
-import static com.iris.ares.generator.LoginPageGenerator.generateLoginPage;
-import static com.iris.ares.react_handler.ReactProjectHandler.createReactProject;
+import static com.iris.ares.reactGenerator.generator.CRUDGenerator.generateCRUDPages;
+import static com.iris.ares.reactGenerator.generator.CSSGenerator.generateCSSFile;
+import static com.iris.ares.reactGenerator.react_handler.ReactProjectHandler.createReactProject;
 
 public class LicenceManager {
     private final Properties licences;

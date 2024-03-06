@@ -1,4 +1,4 @@
-package com.iris.ares.generator;
+package com.iris.ares.reactGenerator.generator;
 
 import java.io.*;
 

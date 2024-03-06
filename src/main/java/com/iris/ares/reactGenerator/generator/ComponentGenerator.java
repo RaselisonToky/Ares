@@ -1,10 +1,9 @@
-package com.iris.ares.generator;
+package com.iris.ares.reactGenerator.generator;
 
-import com.iris.ares.config.FreemarkerConfig;
-import freemarker.cache.ClassTemplateLoader;
+import com.iris.ares.reactGenerator.config.FreemarkerConfig;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
-import freemarker.template.TemplateExceptionHandler;
+
 import java.io.*;
 import java.util.HashMap;
 import java.util.Map;

@@ -1,8 +1,8 @@
-package com.iris.ares.generator;
+package com.iris.ares.reactGenerator.generator;
 
-import com.iris.ares.annotations.Armagedon;
-import com.iris.ares.annotations.GeneratedCRUD;
-import com.iris.ares.config.FreemarkerConfig;
+import com.iris.ares.reactGenerator.annotations.Armagedon;
+import com.iris.ares.reactGenerator.annotations.GeneratedCRUD;
+import com.iris.ares.reactGenerator.config.FreemarkerConfig;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import org.springframework.core.annotation.AnnotatedElementUtils;
@@ -15,10 +15,10 @@ import java.io.*;
 import java.lang.reflect.Field;
 import java.util.*;
 
-import static com.iris.ares.generator.AppJSGenerator.generateAppJS;
-import static com.iris.ares.generator.ComponentGenerator.generateComponents;
-import static com.iris.ares.generator.LoginPageGenerator.generateLoginPage;
-import static com.iris.ares.react_handler.ReactProjectHandler.getValueFromEnv;
+import static com.iris.ares.reactGenerator.generator.AppJSGenerator.generateAppJS;
+import static com.iris.ares.reactGenerator.generator.ComponentGenerator.generateComponents;
+import static com.iris.ares.reactGenerator.generator.LoginPageGenerator.generateLoginPage;
+import static com.iris.ares.reactGenerator.react_handler.ReactProjectHandler.getValueFromEnv;
 
 public class CRUDGenerator {
     private static final String PGD_FILE = "PGD.txt";

@@ -1,4 +1,4 @@
-package com.iris.ares.config;
+package com.iris.ares.reactGenerator.config;
 
 import freemarker.template.Configuration;
 import freemarker.template.TemplateExceptionHandler;

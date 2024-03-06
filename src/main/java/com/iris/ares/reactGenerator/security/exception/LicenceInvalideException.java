@@ -1,4 +1,4 @@
-package com.iris.ares.security.exception;
+package com.iris.ares.reactGenerator.security.exception;
 
 public class LicenceInvalideException extends Exception {
     public LicenceInvalideException() {

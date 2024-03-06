@@ -2,8 +2,8 @@ package com.iris.ares;
 
 
 
-import com.iris.ares.security.LicenceManager;
-import com.iris.ares.security.exception.LicenceInvalideException;
+import com.iris.ares.reactGenerator.security.LicenceManager;
+import com.iris.ares.reactGenerator.security.exception.LicenceInvalideException;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 

@@ -1,4 +1,4 @@
-package com.iris.ares.react_handler;
+package com.iris.ares.reactGenerator.react_handler;
 
 import org.springframework.stereotype.Component;
 

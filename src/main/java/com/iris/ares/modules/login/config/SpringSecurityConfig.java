@@ -29,7 +29,7 @@ import java.util.Base64;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
-import static com.iris.ares.react_handler.ReactProjectHandler.getValueFromEnv;
+import static com.iris.ares.reactGenerator.react_handler.ReactProjectHandler.getValueFromEnv;
 
 
 @Configuration
