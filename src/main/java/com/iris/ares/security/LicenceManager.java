@@ -18,6 +18,11 @@ import java.util.Scanner;
 
 import javax.crypto.Cipher;
 
+import static com.iris.ares.generator.CRUDGenerator.generateCRUDPages;
+import static com.iris.ares.generator.CSSGenerator.generateCSSFile;
+import static com.iris.ares.generator.LoginPageGenerator.generateLoginPage;
+import static com.iris.ares.react_handler.ReactProjectHandler.createReactProject;
+
 public class LicenceManager {
     private final Properties licences;
     private PrivateKey privateKey;
@@ -61,9 +66,9 @@ public class LicenceManager {
         if (!isLicenceValid(username, licenceKey)) {
             throw new LicenceInvalideException("Invalid licence. Access denied.");
         } else {
-            ReactProjectHandler.createReactProject();
-            CRUDGenerator.generateCRUDPages();
-            CSSGenerator.generateCSSFile();
+            createReactProject();
+            generateCRUDPages();
+            generateCSSFile();
         }
 
     }

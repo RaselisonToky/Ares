@@ -34,38 +34,33 @@ import java.util.stream.Collectors;
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SpringSecurityConfig {
-
     private final String jwtKey = generateSecurityKey();
-
     private final CustomUserDetailsService customUserDetailsService;
-
     @Autowired
     public SpringSecurityConfig(CustomUserDetailsService customUserDetailsService){
         this.customUserDetailsService = customUserDetailsService;
     }
-
     @Bean
     public AuthenticationManager authenticationManager(HttpSecurity http, BCryptPasswordEncoder bCryptPasswordEncoder) throws Exception {
         AuthenticationManagerBuilder authenticationManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
         authenticationManagerBuilder.userDetailsService(customUserDetailsService).passwordEncoder(bCryptPasswordEncoder);
         return authenticationManagerBuilder.build();
     }
-
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .anonymous(AbstractHttpConfigurer::disable)
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(auth ->{
-                    auth.requestMatchers("api/v1/auth/*/**").permitAll();
-                    //auth.requestMatchers("/admin").hasAnyAuthority("ROLE_ADMIN");
-                    auth.anyRequest().authenticated();
-                })
-                .csrf(AbstractHttpConfigurer::disable)
-                .oauth2ResourceServer(oauth2 -> oauth2
-                        .jwt(jwt -> jwt
-                                .jwtAuthenticationConverter(new CustomAuthenticationConverter())
-                        ));
+            .anonymous(AbstractHttpConfigurer::disable)
+            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .authorizeHttpRequests(auth ->{
+                auth.requestMatchers("api/v1/auth/*/**").permitAll();
+                //auth.requestMatchers("/admin").hasAnyAuthority("ROLE_ADMIN");
+                auth.anyRequest().authenticated();
+            })
+            .csrf(AbstractHttpConfigurer::disable)
+            .oauth2ResourceServer(oauth2 -> oauth2
+                    .jwt(jwt -> jwt
+                            .jwtAuthenticationConverter(new CustomAuthenticationConverter())
+                    ));
         return http.build();
     }
     static class CustomAuthenticationConverter implements Converter<Jwt, AbstractAuthenticationToken> {

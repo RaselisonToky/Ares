@@ -15,13 +15,14 @@ import java.io.*;
 import java.lang.reflect.Field;
 import java.util.*;
 
+import static com.iris.ares.generator.AppJSGenerator.generateAppJS;
 import static com.iris.ares.generator.ComponentGenerator.generateComponents;
+import static com.iris.ares.generator.LoginPageGenerator.generateLoginPage;
 
 public class CRUDGenerator {
     private static final String PGD_FILE = "PGD.txt";
-    private static final String TEMPLATE_LIST = "list.ftl";
-    private static final String TEMPLATE_ADD = "add.ftl";
-    private static final String TEMPLATE_EDIT = "edit.ftl";
+    private static final String[] TEMPLATES = {"list.ftl", "add.ftl", "edit.ftl"};
+    private static final String[] DIRECTORY_PREFIXES = {"list_", "add_", "edit_"};
     private static final String PAGES_DIRECTORY = "src/pages";
 
     public static void generateCRUDPages() {
@@ -30,20 +31,20 @@ public class CRUDGenerator {
             cfg.setClassForTemplateLoading(CSSGenerator.class, "/templates/CRUDTemplates");
             cfg.setDefaultEncoding("UTF-8");
             cfg.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
-            Template listTemplate = cfg.getTemplate(TEMPLATE_LIST);
-            Template addTemplate = cfg.getTemplate(TEMPLATE_ADD);
-            Template editTemplate = cfg.getTemplate(TEMPLATE_EDIT);
+            Template[] templates = new Template[TEMPLATES.length];
+            for (int i = 0; i < TEMPLATES.length; i++) {
+                templates[i] = cfg.getTemplate(TEMPLATES[i]);
+            }
             String reactProjectDirectory = readProjectDirectory();
             List<AnnotatedClassInfo> annotatedClasses = findAnnotatedClasses(GeneratedCRUD.class.getName());
             List<String> entityNames = new ArrayList<>();
-            System.out.println("Nombre de classes annotées trouvées : " + annotatedClasses.size());
-
             for (AnnotatedClassInfo classInfo : annotatedClasses) {
-                generateClassPages(classInfo, reactProjectDirectory, listTemplate, addTemplate, editTemplate);
+                generateClassPages(classInfo, reactProjectDirectory, templates);
                 entityNames.add(classInfo.className());
             }
 
-            AppJSGenerator.generateAppJS(reactProjectDirectory, entityNames);
+            generateAppJS(reactProjectDirectory, entityNames);
+            generateLoginPage(reactProjectDirectory);
             generateComponents(reactProjectDirectory);
             EnveFileGenerator.generateEnvFileIfNeeded(reactProjectDirectory);
             PackageJsonModifier.addPostInstallCommands(reactProjectDirectory);
@@ -80,7 +81,7 @@ public class CRUDGenerator {
         }
         return annotatedClasses;
     }
-    private static void generateClassPages(AnnotatedClassInfo classInfo, String projectDirectory, Template listTemplate, Template addTemplate, Template editTemplate) {
+    private static void generateClassPages(AnnotatedClassInfo classInfo, String projectDirectory, Template[] templates) {
         try {
             String className = classInfo.className();
             String entityName = className.substring(className.lastIndexOf(".") + 1).toLowerCase();
@@ -89,13 +90,12 @@ public class CRUDGenerator {
             if (!entityDirectory.exists()) {
                 entityDirectory.mkdirs();
             }
-            String addDirectoryPath = entityDirectoryPath + File.separator + "add_" + entityName;
-            String editDirectoryPath = entityDirectoryPath + File.separator + "edit_" + entityName;
-            String listDirectoryPath = entityDirectoryPath + File.separator + "list_" + entityName;
-            createSubdirectoriesIfNotExist(addDirectoryPath, editDirectoryPath, listDirectoryPath);
-            generateFileIfNotExists(addDirectoryPath + File.separator + "page", addTemplate, classInfo);
-            generateFileIfNotExists(editDirectoryPath + File.separator + "page", editTemplate, classInfo);
-            generateFileIfNotExists(listDirectoryPath + File.separator + "page", listTemplate, classInfo);
+
+            for (int i = 0; i < templates.length; i++) {
+                String directoryPath = entityDirectoryPath + File.separator + DIRECTORY_PREFIXES[i] + entityName;
+                createSubdirectoriesIfNotExist(directoryPath);
+                generateFileIfNotExists(directoryPath + File.separator + "page", templates[i], classInfo);
+            }
         } catch (IOException | freemarker.template.TemplateException e) {
             System.err.println(e.getMessage());
         }

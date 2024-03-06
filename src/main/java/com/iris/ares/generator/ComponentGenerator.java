@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ComponentGenerator {
-    private static final String[] TEMPLATE_NAMES = {"select.jsx", "table.jsx"};
+    private static final String[] TEMPLATE_NAMES = {"select.jsx", "table.jsx", "login.jsx"};
     private static final String TEMPLATE_DIRECTORY = "/templates/ComponentTemplates";
     private static final String COMPONENTS_DIRECTORY = "src/components";
     public static void generateComponents(String reactProjectDirectory) {

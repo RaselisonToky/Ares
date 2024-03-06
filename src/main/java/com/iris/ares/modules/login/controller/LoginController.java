@@ -35,7 +35,7 @@ public class LoginController {
                             loginRequest.getUsername(),
                             loginRequest.getPassword())
             );
-            System.out.println("Authentication after login: " + authentication);
+            System.out.println("Authentication after login.ftl: " + authentication);
             SecurityContextHolder.getContext().setAuthentication(authentication);
             return jwtService.generateToken(authentication);
         } catch (UsernameNotFoundException e) {
