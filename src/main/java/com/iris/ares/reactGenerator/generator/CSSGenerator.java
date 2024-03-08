@@ -2,17 +2,37 @@ package com.iris.ares.reactGenerator.generator;
 
 import java.io.*;
 
+
+/**
+ * CSSGenerator
+ * Utility class for generating CSS files.
+ */
 public class CSSGenerator {
 
     private static final String TEMPLATE_CSS = "templates/CSSTemplates/page.module.css";
     private static final String PGD_FILE = "PGD.txt";
 
+
+
+    /**
+     * readProjectDirectory
+     * Reads the project directory from a file.
+     *
+     * @return The project directory path.
+     * @throws IOException if an I/O error occurs.
+     */
     public static String readProjectDirectory() throws IOException {
         try (BufferedReader reader = new BufferedReader(new FileReader(PGD_FILE))) {
             return reader.readLine();
         }
     }
 
+
+
+    /**
+     * generateCSSFile
+     * Generates a CSS file based on a template.
+     */
     public static void generateCSSFile() {
         try {
             String projectDirectory = readProjectDirectory();
@@ -28,6 +48,14 @@ public class CSSGenerator {
         }
     }
 
+
+    /**
+     * createCSSFile
+     * Creates a CSS file if it does not exist.
+     *
+     * @param cssFilePath The path of the CSS file to be created.
+     * @throws IOException if an I/O error occurs.
+     */
     private static void createCSSFile(String cssFilePath) throws IOException {
         File file = new File(cssFilePath);
         if (file.createNewFile()) {
@@ -40,6 +68,15 @@ public class CSSGenerator {
         }
     }
 
+
+    /**
+     * readTemplate
+     * Reads a template file and returns its content as a string.
+     *
+     * @param filePath The path of the template file.
+     * @return The content of the template file.
+     * @throws IOException if an I/O error occurs.
+     */
     public static String readTemplate(String filePath) throws IOException {
         StringBuilder content = new StringBuilder();
         try (InputStream inputStream = CSSGenerator.class.getClassLoader().getResourceAsStream(filePath)) {
@@ -52,5 +89,12 @@ public class CSSGenerator {
             }
         }
         return content.toString();
+    }
+
+    /**
+     * Default Constructor
+     */
+    public CSSGenerator(){
+
     }
 }

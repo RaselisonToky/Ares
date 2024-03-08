@@ -7,7 +7,28 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.stream.Collectors;
 
+
+/**
+ * AppJSGenerator
+ * Utility class for generating App.js file for React applications.
+ */
 public class AppJSGenerator {
+
+
+    /**
+     * Default Constructor
+     */
+    public AppJSGenerator(){
+
+    }
+
+
+    /**
+     * generateAppJs
+     * Generates the App.js file based on the provided entity names.
+     * @param projectDirectory The project directory where the App.js file will be generated.
+     * @param entityNames The list of entity names to generate routes for.
+     */
     public static void generateAppJS(String projectDirectory, List<String> entityNames) {
         String appJSPath = projectDirectory + File.separator + "src" + File.separator + "App.js";
         String templatePath = "templates/App.js";
@@ -29,6 +50,14 @@ public class AppJSGenerator {
             System.err.println("An error occurred while generating App.js file: " + e.getMessage());
         }
     }
+
+
+    /**
+     * generateImports
+     * Generates import statements based on the provided entity names.
+     * @param entityNames The list of entity names to generate imports for.
+     * @return The generated import statements as a String.
+     */
     private static String generateImports(List<String> entityNames) {
         StringBuilder imports = new StringBuilder();
         for (String entityName : entityNames) {
@@ -40,6 +69,14 @@ public class AppJSGenerator {
         imports.append("import Login from './pages/auth/signin/page';\n");
         return imports.toString();
     }
+
+
+    /**
+     * generateRoutes
+     * Generates route declarations based on the provided entity names.
+     * @param entityNames The list of entity names to generate routes for.
+     * @return The generated route declarations as a String.
+     */
     private static String generateRoutes(List<String> entityNames) {
         StringBuilder routes = new StringBuilder();
         for (String entityName : entityNames) {
@@ -51,6 +88,17 @@ public class AppJSGenerator {
         routes.append("<Route path='/login' element={<Login/>} />");
         return indent(routes.toString(), 18);
     }
+
+
+
+
+
+    /**
+     * extractManualRoutes
+     * Extracts manual route declarations from the provided navigation lines.
+     * @param navigationLines The list of lines from the navigation file.
+     * @return The extracted manual route declarations as a String.
+     */
     private static String extractManualRoutes(List<String> navigationLines) {
         StringBuilder manualRoutes = new StringBuilder();
         for (String line : navigationLines) {
@@ -60,6 +108,17 @@ public class AppJSGenerator {
         }
         return indent(manualRoutes.toString(),0) ;
     }
+
+
+
+
+
+    /**
+     * extractManualImports
+     * Extracts manual import statements from the provided navigation lines.
+     * @param navigationLines The list of lines from the navigation file.
+     * @return The extracted manual import statements as a String.
+     */
     private static String extractManualImports(List<String> navigationLines) {
         StringBuilder manualImports = new StringBuilder();
         for (String line : navigationLines) {
@@ -69,6 +128,22 @@ public class AppJSGenerator {
         }
         return manualImports.toString();
     }
+
+
+
+
+
+
+
+    /**
+     * replaceMarkers
+     * Replaces markers in the template file with the provided imports and routes.
+     * @param templatePath The path to the template file.
+     * @param imports The import statements to replace.
+     * @param routes The route declarations to replace.
+     * @return The updated content with replaced markers.
+     * @throws IOException If an I/O error occurs while reading the template file.
+     */
     private static String replaceMarkers(String templatePath, String imports, String routes) throws IOException {
         InputStream inputStream = AppJSGenerator.class.getClassLoader().getResourceAsStream(templatePath);
         if (inputStream == null) {
@@ -80,6 +155,17 @@ public class AppJSGenerator {
                     .collect(Collectors.joining("\n"));
         }
     }
+
+
+
+
+    /**
+     * indent
+     * Adds indentation to each line of the provided string.
+     * @param str The string to indent.
+     * @param spaces The number of spaces to indent.
+     * @return The indented string.
+     */
     private static String indent(String str, int spaces) {
         StringBuilder sb = new StringBuilder();
         String[] lines = str.split("\n");

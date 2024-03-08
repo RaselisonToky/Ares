@@ -7,10 +7,21 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Properties;
 
+
+/**
+ * ReactProjectHandler
+ * Utility class for handling React project creation and directory management.
+ */
 @Component
 public class ReactProjectHandler {
     private static final String LOCK_FILE = "react_project_created.lock";
     private static final String REACT_SCRIPT = "C:\\Program Files\\nodejs\\npx.cmd";
+
+
+    /**
+     * createReactProject
+     * Creates a new React project if it doesn't already exist.
+     */
     public static void createReactProject() {
         if (lockFileExists()) {
             return;
@@ -39,14 +50,33 @@ public class ReactProjectHandler {
             System.err.println("Erreur lors de la création ou vérification du projet React : " + e.getMessage());
         }
     }
-    private static boolean lockFileExists(){
-        return Files.exists(Paths.get(LOCK_FILE));
-    }
 
-    private static void createLockFile() throws IOException{
-        Files.createFile(Paths.get(LOCK_FILE));
-    }
 
+    /**
+     * lockFileExists
+     * Checks if the lock file exists.
+     *
+     * @return true if the lock file exists, false otherwise.
+     */
+    private static boolean lockFileExists(){ return Files.exists(Paths.get(LOCK_FILE)); }
+
+
+    /**
+     * createLockFile
+     * Creates the lock file to indicate that the React project has been created.
+     *
+     * @throws IOException if an I/O error occurs.
+     */
+    private static void createLockFile() throws IOException{ Files.createFile(Paths.get(LOCK_FILE)); }
+
+
+
+    /**
+     * writeProjectDirectoryToFile
+     * Writes the new React project directory to a PGD.txt file for future reference.
+     *
+     * @param projectDirectory The directory of the React project.
+     */
     private static void writeProjectDirectoryToFile(String projectDirectory) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter("PGD.txt"))) {
             System.out.println(projectDirectory);
@@ -56,6 +86,14 @@ public class ReactProjectHandler {
         }
     }
 
+
+    /**
+     * getValueFromEnv
+     * Gets the value of a key from the .env file.
+     *
+     * @param key The key whose value is to be retrieved.
+     * @return The value corresponding to the key.
+     */
     public static String getValueFromEnv(String key) {
         String projectRootPath = null;
         try (InputStream input = new FileInputStream(".env")) {
@@ -70,5 +108,13 @@ public class ReactProjectHandler {
             System.err.println("Erreur lors de la lecture du fichier .env : " + e.getMessage());
         }
         return projectRootPath;
+    }
+
+
+    /**
+     Default Constructor
+     */
+    public ReactProjectHandler(){
+
     }
 }

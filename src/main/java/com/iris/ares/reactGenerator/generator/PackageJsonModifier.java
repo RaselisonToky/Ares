@@ -7,8 +7,21 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 
+
+
+/**
+ * PackageJsonModifier
+ * Utility class for modifying the package.json file.
+ */
 public class PackageJsonModifier {
 
+
+    /**
+     * addPostInstallCommands
+     * Adds post-installation commands to the package.json file if they do not already exist.
+     *
+     * @param projectDirectory The directory where the package.json file is located.
+     */
     public static void addPostInstallCommands(String projectDirectory) {
         String packageJsonPath = projectDirectory + File.separator + "package.json";
         try {
@@ -25,6 +38,14 @@ public class PackageJsonModifier {
         } catch (IOException e) {
             System.err.println("Error adding post-install commands to package.json: " + e.getMessage());
         }
+    }
+
+
+    /**
+     * Default Constructor
+     */
+    public PackageJsonModifier(){
+
     }
 
 

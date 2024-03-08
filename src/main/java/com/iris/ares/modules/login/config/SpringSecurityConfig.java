@@ -31,23 +31,45 @@ import java.util.stream.Collectors;
 
 import static com.iris.ares.reactGenerator.react_handler.ReactProjectHandler.getValueFromEnv;
 
-
+/**
+ * Configuration class for Spring Security.
+ */
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SpringSecurityConfig {
     private final String jwtKey = generateSecurityKey();
     private final CustomUserDetailsService customUserDetailsService;
+
+    /**
+     * Constructor
+     * @param customUserDetailsService The custom user details service.
+     */
     @Autowired
     public SpringSecurityConfig(CustomUserDetailsService customUserDetailsService){
         this.customUserDetailsService = customUserDetailsService;
     }
+
+    /**
+     * Provides the AuthenticationManager bean.
+     * @param http HttpSecurity object
+     * @param bCryptPasswordEncoder BCrypt password encoder
+     * @return AuthenticationManager bean
+     * @throws Exception If an error occurs during configuration
+     */
     @Bean
     public AuthenticationManager authenticationManager(HttpSecurity http, BCryptPasswordEncoder bCryptPasswordEncoder) throws Exception {
         AuthenticationManagerBuilder authenticationManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
         authenticationManagerBuilder.userDetailsService(customUserDetailsService).passwordEncoder(bCryptPasswordEncoder);
         return authenticationManagerBuilder.build();
     }
+
+    /**
+     * Provides the SecurityFilterChain bean.
+     * @param http HttpSecurity object
+     * @return SecurityFilterChain bean
+     * @throws Exception If an error occurs during configuration
+     */
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
@@ -68,6 +90,12 @@ public class SpringSecurityConfig {
                     ));
         return http.build();
     }
+
+
+    /**
+     * CustomAuthenticationConverter
+     * Converts a Jwt token into an AbstractAuthenticationToken.
+     */
     static class CustomAuthenticationConverter implements Converter<Jwt, AbstractAuthenticationToken> {
         public AbstractAuthenticationToken convert(Jwt jwt) {
             Collection<String> authorities = jwt.getClaimAsStringList("roles");
@@ -79,23 +107,41 @@ public class SpringSecurityConfig {
     }
 
 
-
+    /**
+     * Generates a random security key.
+     * @return A random security key
+     */
     public String generateSecurityKey() {
         byte[] keyBytes = new byte[32];
         new SecureRandom().nextBytes(keyBytes);
         return Base64.getEncoder().encodeToString(keyBytes);
     }
 
+    /**
+     * Provides the JwtDecoder bean.
+     * @return JwtDecoder bean
+     */
     @Bean
     public JwtDecoder jwtDecoder() {
         return NimbusJwtDecoder.withSecretKey(new SecretKeySpec(this.jwtKey.getBytes(StandardCharsets.UTF_8), SignatureAlgorithm.HS256.getJcaName()))
                 .macAlgorithm(MacAlgorithm.HS256)
                 .build();
     }
+
+
+    /**
+     * Provides the JwtEncoder bean.
+     * @return JwtEncoder bean
+     */
     @Bean
     public JwtEncoder jwtEncoder() {
         return new NimbusJwtEncoder(new ImmutableSecret<>(this.jwtKey.getBytes(StandardCharsets.UTF_8)));
     }
+
+    /**
+     * Provides the BCryptPasswordEncoder bean.
+     * @return BCryptPasswordEncoder bean
+     */
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();

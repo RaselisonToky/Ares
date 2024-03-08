@@ -5,6 +5,10 @@ import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * Represents a role in the system.
+ * This class defines the role of a user within the system.
+ */
 @Setter
 @Getter
 @Entity
@@ -12,4 +16,12 @@ public class Role {
     @Id
     int roleId;
     String role;
+
+    /**
+     * Default Role
+     */
+    public Role(){
+
+    }
+
 }

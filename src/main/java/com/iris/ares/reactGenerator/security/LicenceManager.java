@@ -19,10 +19,20 @@ import static com.iris.ares.reactGenerator.generator.CRUDGenerator.generateCRUDP
 import static com.iris.ares.reactGenerator.generator.CSSGenerator.generateCSSFile;
 import static com.iris.ares.reactGenerator.react_handler.ReactProjectHandler.createReactProject;
 
+
+/**
+ * LicenceManager
+ * Manages licence validation and initialization of the application.
+ */
 public class LicenceManager {
     private final Properties licences;
     private PrivateKey privateKey;
 
+
+    /**
+     * Constructor
+     * Initializes LicenceManager by loading licence properties and private key.
+     */
     public LicenceManager() {
         this.licences = new Properties();
         try (InputStream inputStream = LicenceManager.class.getResourceAsStream("/licence.properties")) {
@@ -37,6 +47,14 @@ public class LicenceManager {
         }
     }
 
+
+    /**
+     * Decrypts the given encrypted data using the private key.
+     *
+     * @param encryptedData The encrypted data to decrypt.
+     * @return The decrypted data.
+     * @throws Exception If decryption fails.
+     */
     private String decrypt(String encryptedData) throws Exception {
         byte[] encryptedBytes = Base64.getDecoder().decode(encryptedData);
         Cipher cipher = Cipher.getInstance("RSA");
@@ -44,6 +62,16 @@ public class LicenceManager {
         byte[] decryptedBytes = cipher.doFinal(encryptedBytes);
         return new String(decryptedBytes);
     }
+
+
+    /**
+     * Checks if the licence associated with the given username is valid.
+     *
+     * @param username   The username associated with the licence.
+     * @param licenceKey The licence key to validate.
+     * @return true if the licence is valid, false otherwise.
+     * @throws Exception If licence validation fails.
+     */
     public boolean isLicenceValid(String username, String licenceKey) throws Exception {
         String storedEncryptedLicenceKey = licences.getProperty(username);
         if (storedEncryptedLicenceKey != null) {
@@ -53,6 +81,14 @@ public class LicenceManager {
         return false;
     }
 
+
+
+    /**
+     * Initializes the application after validating the licence.
+     *
+     * @throws LicenceInvalideException If the licence is invalid.
+     * @throws Exception                If an error occurs during initialization.
+     */
     public void init() throws Exception {
         Scanner scanner = new Scanner(System.in);
         System.out.print("Username : ");

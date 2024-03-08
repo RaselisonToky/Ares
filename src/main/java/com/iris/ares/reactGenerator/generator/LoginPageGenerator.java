@@ -6,9 +6,22 @@ import freemarker.template.Template;
 import java.io.*;
 import java.util.HashMap;
 
+
+/**
+ * LoginPageGenerator
+ * Utility class for generating login pages.
+ */
 public class LoginPageGenerator {
     private static final String TEMPLATE_NAME = "login.ftl";
     private static final String PAGE_NAME = "page";
+
+
+    /**
+     * generateLoginPage
+     * Generates a login page using a Freemarker template.
+     *
+     * @param string The directory where the login page should be generated.
+     */
     public static void generateLoginPage(String string) {
         try {
             Configuration cfg = FreemarkerConfig.getConfig(LoginPageGenerator.class, "/templates/Auth");
@@ -34,6 +47,14 @@ public class LoginPageGenerator {
         } catch (Exception e) {
             System.err.println("Erreur lors de la génération de la page de connexion : " + e.getMessage());
         }
+    }
+
+
+    /**
+     * Default Constructor
+     */
+    public LoginPageGenerator(){
+
     }
 
 }

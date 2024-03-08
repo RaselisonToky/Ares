@@ -20,6 +20,12 @@ import static com.iris.ares.reactGenerator.generator.ComponentGenerator.generate
 import static com.iris.ares.reactGenerator.generator.LoginPageGenerator.generateLoginPage;
 import static com.iris.ares.reactGenerator.react_handler.ReactProjectHandler.getValueFromEnv;
 
+
+/**
+ * CRUDGenerator
+ * Utility class for generating CRUD pages based on classes annotated with @GeneratedCRUD.
+ */
+
 public class CRUDGenerator {
     private static final String PGD_FILE = "PGD.txt";
     private static final String[] TEMPLATES = {"list.ftl", "add.ftl", "edit.ftl"};
@@ -27,6 +33,11 @@ public class CRUDGenerator {
     private static final String PACKAGE_ROOT_PATH = getValueFromEnv("PACKAGE_ROOT_PATH");
     private static final String PAGES_DIRECTORY = "src/pages";
 
+
+    /**
+     * generateCRUDPages
+     * Generates CRUD pages based on annotated classes annotated with @GeneratedCRUD..
+     */
     public static void generateCRUDPages() {
         try {
             Configuration cfg = FreemarkerConfig.getConfig(CSSGenerator.class, "/templates/CRUDTemplates");
@@ -51,11 +62,28 @@ public class CRUDGenerator {
             System.err.println(e.getMessage());
         }
     }
+
+    /**
+     * readProjectDirectory
+     * Reads the project directory from a file.
+     *
+     * @return The project directory path.
+     * @throws IOException if an I/O error occurs.
+     */
     private static String readProjectDirectory() throws IOException {
         try (BufferedReader reader = new BufferedReader(new FileReader(PGD_FILE))) {
             return reader.readLine();
         }
     }
+
+
+    /**
+     * findAnnotatedClasses
+     * Finds classes annotated with the specified annotation.
+     *
+     * @param string The fully qualified name of the annotation.
+     * @return A list of AnnotatedClassInfo objects.
+     */
     private static List<AnnotatedClassInfo> findAnnotatedClasses(String string) {
         List<AnnotatedClassInfo> annotatedClasses = new ArrayList<>();
         try {
@@ -80,6 +108,16 @@ public class CRUDGenerator {
         }
         return annotatedClasses;
     }
+
+
+    /**
+     * generateClassPages
+     * Generates CRUD pages for a given annotated class.
+     *
+     * @param classInfo            AnnotatedClassInfo object representing the annotated class.
+     * @param projectDirectory     The directory of the React project.
+     * @param templates            Array of Template objects representing the CRUD templates.
+     */
     private static void generateClassPages(AnnotatedClassInfo classInfo, String projectDirectory, Template[] templates) {
         try {
             String className = classInfo.className();
@@ -100,6 +138,17 @@ public class CRUDGenerator {
         }
     }
 
+
+    /**
+     * generateFileIfNotExists
+     * Generates a file if it does not exist.
+     *
+     * @param filePath  The path of the file to be generated.
+     * @param template  The Template object representing the template file.
+     * @param classInfo AnnotatedClassInfo object representing the annotated class.
+     * @throws IOException if an I/O error occurs.
+     * @throws freemarker.template.TemplateException if an error occurs while processing the template.
+     */
     private static void generateFileIfNotExists(String filePath, Template template, AnnotatedClassInfo classInfo)
             throws IOException, freemarker.template.TemplateException {
         File file = new File(filePath + ".jsx");
@@ -122,6 +171,15 @@ public class CRUDGenerator {
             }
         }
     }
+
+    /**
+     * isFieldAnnotatedWithArmagedon
+     * Checks if a field is annotated with @Armagedon.
+     *
+     * @param fieldName The name of the field.
+     * @param classInfo AnnotatedClassInfo object representing the annotated class.
+     * @return true if the field is annotated with @Armagedon, false otherwise.
+     */
     private static boolean isFieldAnnotatedWithArmagedon(String fieldName, AnnotatedClassInfo classInfo) {
         for (FieldInfo fieldInfo : classInfo.fields()) {
             if (fieldInfo.name().equals(fieldName)) {
@@ -137,6 +195,15 @@ public class CRUDGenerator {
         }
         return false;
     }
+
+
+
+    /**
+     * createSubdirectoriesIfNotExist
+     * Creates subdirectories if they do not exist.
+     *
+     * @param directoryPaths The paths of the directories to be created.
+     */
     private static void createSubdirectoriesIfNotExist(String... directoryPaths) {
         for (String directoryPath : directoryPaths) {
             File directory = new File(directoryPath);
@@ -147,8 +214,24 @@ public class CRUDGenerator {
     }
 
 
+    /**
+     * AnnotatedClassInfo
+     * Represents information about an annotated class.
+     */
     private record AnnotatedClassInfo(String className, List<FieldInfo> fields) {
     }
+
+    /**
+     * FieldInfo
+     * Represents information about a field in a class.
+     */
     private record FieldInfo(String name, String type) {
+    }
+
+    /**
+     * Default Constructor
+     */
+    public CRUDGenerator(){
+
     }
 }

@@ -7,13 +7,32 @@ import com.iris.ares.reactGenerator.security.exception.LicenceInvalideException;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+/**
+ * Main Class for Ares application
+ */
 @SpringBootApplication
 public class AresApplication {
 
+    /**
+     * Default Constructor
+     */
+    public AresApplication(){
+
+    }
+
+
+    /**
+     * Nothing to comment
+     * @param args args
+     */
     public static void main(String[] args) {
         SpringApplication.run(AresApplication.class, args);
     }
 
+
+    /**
+     * Method who initialize AresApplication
+     */
     public static void initialize(){
         try {
             LicenceManager licenceManager = new LicenceManager();

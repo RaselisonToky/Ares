@@ -15,14 +15,30 @@ import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * JWTService
+ * Service class for generating JSON Web Tokens (JWT) for authentication.
+ * This service generates JWT tokens based on the provided authentication information.
+ */
 @Service
 public class JWTService {
     private final JwtEncoder jwtEncoder;
 
+    /**
+     * Constructor
+     * @param jwtEncoder The JWT encoder used for encoding tokens.
+     */
     @Autowired
     public JWTService(JwtEncoder jwtEncoder) {
         this.jwtEncoder = jwtEncoder;
     }
+
+    /**
+     * Generate Token
+     * Generates a JWT token based on the provided authentication information.
+     * @param authentication The authentication object containing user details.
+     * @return A JWT token as a String.
+     */
     public String generateToken(Authentication authentication) {
         Instant now = Instant.now();
         List<String> roles = authentication.getAuthorities().stream()
