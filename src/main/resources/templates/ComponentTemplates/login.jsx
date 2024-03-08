@@ -11,7 +11,7 @@ const LoginForm = () => {
                 username,
                 password
             });
-            const token = response.data;
+            const token = response.data.token;
             localStorage.setItem('token', token);
         } catch (error) {
             console.error('Error:', error.response.data);
@@ -21,7 +21,6 @@ const LoginForm = () => {
     return (
         <div>
             <h2>Connexion</h2>
-            <form onSubmit={handleSubmit}>
                 <div>
                     <label htmlFor="emailOrUsername">Email ou Nom d'utilisateur</label>
                     <input
@@ -42,8 +41,7 @@ const LoginForm = () => {
                         required
                     />
                 </div>
-                <button type="submit">Se connecter</button>
-            </form>
+                <button onClick={handleSubmit}>Se connecter</button>
         </div>
     );
 };

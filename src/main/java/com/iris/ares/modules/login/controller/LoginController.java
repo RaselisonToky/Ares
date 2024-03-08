@@ -13,6 +13,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -47,11 +49,12 @@ public class LoginController {
     /**
      * Login Endpoint
      * Authenticates a user and generates a JWT token upon successful login.
+     *
      * @param loginRequest The login request containing username and password.
      * @return A JWT token as a String.
      */
     @PostMapping("/login")
-    public String getToken(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<?> getToken(@RequestBody LoginRequest loginRequest) {
         try {
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
@@ -60,9 +63,13 @@ public class LoginController {
             );
             System.out.println("Authentication after login: " + authentication);
             SecurityContextHolder.getContext().setAuthentication(authentication);
-            return jwtService.generateToken(authentication);
+            String token = jwtService.generateToken(authentication);
+            Map<String, String> response = new HashMap<>();
+            response.put("token", token);
+
+            return ResponseEntity.ok(response);
         } catch (UsernameNotFoundException e) {
-            return ("Invalid username or password");
+            return ResponseEntity.badRequest().body("Invalid username or password");
         }
     }
 

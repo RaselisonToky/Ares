@@ -26,24 +26,16 @@ public class LoginPageGenerator {
         try {
             Configuration cfg = FreemarkerConfig.getConfig(LoginPageGenerator.class, "/templates/Auth");
             String output_directory = string + File.separator + "src/pages/auth/signin";
-
-            // Loading the template
             Template template = cfg.getTemplate(TEMPLATE_NAME);
 
-            // Creating the output directory if it does not exist
             File outputDirectory = new File(output_directory);
             if (!outputDirectory.exists()) {
                 outputDirectory.mkdirs();
-            }
-
-            // Full path for the output file
-            String outputFile = output_directory + File.separator + PAGE_NAME + ".jsx";
-
-            // Generating the output file from the template
-            try (Writer writer = new FileWriter(outputFile)) {
+                String outputFile = output_directory + File.separator + PAGE_NAME + ".jsx";
+                Writer writer = new FileWriter(outputFile);
                 template.process(new HashMap<>(), writer);
             }
-            System.out.println("Page de connexion générée avec succès : " + outputFile);
+
         } catch (Exception e) {
             System.err.println("Erreur lors de la génération de la page de connexion : " + e.getMessage());
         }
