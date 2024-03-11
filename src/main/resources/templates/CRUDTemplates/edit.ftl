@@ -16,7 +16,13 @@ const Update${entityName} = () => {
 </#list>
 
     useEffect(() => {
-        axios.get(`${'$'}{process.env.REACT_APP_API}/api/v1/${entityName?lower_case}s/${'$'}{itemId}`)
+        const token = localStorage.getItem('token');
+            const axiosConfig = {
+                headers: {
+                'Authorization': 'Bearer ' + token
+            }
+        };
+        axios.get(`${'$'}{process.env.REACT_APP_API}/api/v1/${entityName?lower_case}s/${'$'}{itemId}`, axiosConfig)
         .then(response => {
 <#list fields as field>
     <#if field.isArmagedon == "true">
@@ -33,7 +39,13 @@ const Update${entityName} = () => {
 <#list fields as field>
     <#if field.isArmagedon == "true">
     useEffect(() => {
-        axios.get(`${'$'}{process.env.REACT_APP_API}/api/v1/${field.name}s`)
+        const token = localStorage.getItem('token');
+        const axiosConfig = {
+            headers: {
+                'Authorization': 'Bearer ' + token
+            }
+        };
+        axios.get(`${'$'}{process.env.REACT_APP_API}/api/v1/${field.name}s`,axiosConfig)
         .then(response => set${field.name?capitalize}(response.data))
         .catch(error => console.error('Error fetching ${field.name}:', error));
     }, []);

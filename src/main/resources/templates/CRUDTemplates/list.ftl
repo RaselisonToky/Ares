@@ -16,13 +16,18 @@ const List${entityName} = () => {
     useEffect(() => {
         const fetchItems = async () => {
         try {
-            const response = await axios.get(`${'$'}{process.env.REACT_APP_API}/api/v1/${entityName?lower_case}s`);
+            const token = localStorage.getItem('token');
+            const axiosConfig = {
+                headers: {
+                    'Authorization': 'Bearer ' + token
+                }
+            };
+            const response = await axios.get(`${'$'}{process.env.REACT_APP_API}/api/v1/${entityName?lower_case}s`, axiosConfig);
             set${entityName}(response.data);
         } catch (error) {
             console.error('Error fetching items:', error);
         }
         };
-
         fetchItems();
     }, []);
 

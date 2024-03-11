@@ -13,8 +13,9 @@ const LoginForm = () => {
             });
             const token = response.data.token;
             localStorage.setItem('token', token);
+            window.location = '/list_marque';
         } catch (error) {
-            console.error('Error:', error.response.data);
+            console.error('Error:', error);
         }
     };
 

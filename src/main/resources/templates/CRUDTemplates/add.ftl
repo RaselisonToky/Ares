@@ -31,6 +31,11 @@ function Add${entityName}() {
 
     const handleSubmit = async () => {
         try {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                console.error('Token manquant. Assurez-vous de vous connecter avant de faire cette requête.');
+                return;
+            }
             const response = await axios.post(`${'$'}{process.env.REACT_APP_API}/api/v1/${entityName?lower_case}s`, {
         <#list fields as field >
             <#if field.isArmagedon == "true">
@@ -39,6 +44,11 @@ function Add${entityName}() {
                 ${field.name},
             </#if>
         </#list>
+            },{
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + token,
+                }
             });
                 console.log('${entityName} sauvegardé(e) avec succès:', response.data);
             } catch (error) {
