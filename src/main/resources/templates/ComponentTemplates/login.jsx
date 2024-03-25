@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import styles from "../../page.module.css";
 
 const LoginForm = () => {
     const [username , setUsername] = useState();
@@ -20,29 +21,31 @@ const LoginForm = () => {
     };
 
     return (
-        <div>
-            <h2>Connexion</h2>
-                <div>
-                    <label htmlFor="emailOrUsername">Email ou Nom d'utilisateur</label>
-                    <input
-                        type="text"
-                        id="emailOrUsername"
-                        name="emailOrUsername"
-                        onChange={(e) => setUsername(e.target.value)}
-                        required
-                    />
-                </div>
-                <div>
-                    <label htmlFor="password">Mot de passe</label>
-                    <input
-                        type="password"
-                        id="password"
-                        name="password"
-                        onChange={(e)=>setPassword(e.target.value)}
-                        required
-                    />
-                </div>
-                <button onClick={handleSubmit}>Se connecter</button>
+        <div className={styles.container}>
+            <h2 className={styles.h2title} >Connexion</h2>
+            <div className={styles.champ}>
+                <label htmlFor="emailOrUsername" className={styles.label}>Email ou Nom d'utilisateur</label>
+                <input
+                    type="text"
+                    id="emailOrUsername"
+                    name="emailOrUsername"
+                    onChange={(e) => setUsername(e.target.value)}
+                    className={styles.input}
+                    required
+                />
+            </div>
+            <div className={styles.champ}>
+                <label htmlFor="password" className={styles.label}>Mot de passe</label>
+                <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    onChange={(e)=>setPassword(e.target.value)}
+                    className={styles.input}
+                    required
+                />
+            </div>
+            <button onClick={handleSubmit} className={styles.button}>Se connecter</button>
         </div>
     );
 };

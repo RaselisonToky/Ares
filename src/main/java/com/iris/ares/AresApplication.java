@@ -43,7 +43,5 @@ public class AresApplication {
         } catch (Exception e) {
             System.exit(1);
         }
-
     }
-
 }

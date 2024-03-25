@@ -36,7 +36,7 @@ public class CRUDGenerator {
 
     /**
      * generateCRUDPages
-     * Generates CRUD pages based on annotated classes annotated with @GeneratedCRUD..
+     * Generates CRUD pages based on annotated classes annotated with @GeneratedCRUD
      */
     public static void generateCRUDPages() {
         try {

@@ -4,6 +4,7 @@ import com.iris.ares.modules.login.model.BasicUser;
 import com.iris.ares.modules.login.model.LoginRequest;
 import com.iris.ares.modules.login.services.JWTService;
 import com.iris.ares.modules.login.services.UserService;
+import com.iris.ares.modules.primarykeysGenerator.IdGeneratorService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -25,7 +26,6 @@ import java.util.Map;
 @RequestMapping("api/v1/auth")
 @CrossOrigin(origins = "*")
 public class LoginController {
-    private final UserService userService;
     /**
      * JwtService
      */
@@ -39,8 +39,7 @@ public class LoginController {
      * @param jwtService The JWTService for generating JWT tokens.
      * @param authenticationManager The AuthenticationManager for handling authentication.
      */
-    public LoginController(UserService userService, JWTService jwtService, AuthenticationManager authenticationManager) {
-        this.userService = userService;
+    public LoginController(UserService userService, IdGeneratorService idGeneratorService, JWTService jwtService, AuthenticationManager authenticationManager) {
         this.jwtService = jwtService;
         this.authenticationManager = authenticationManager;
     }
@@ -73,16 +72,4 @@ public class LoginController {
         }
     }
 
-
-    /**
-     * Signup Endpoint
-     * Registers a new user in the system.
-     * @param user The user object to be registered.
-     * @return ResponseEntity with status and message indicating success or failure.
-     */
-    @PostMapping("/signup")
-    public ResponseEntity<String> signup(@RequestBody BasicUser user) {
-        userService.saveUser(user);
-        return ResponseEntity.status(HttpStatus.CREATED).body("User created successfully");
-    }
 }

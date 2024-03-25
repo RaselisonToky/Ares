@@ -14,7 +14,7 @@ import lombok.Setter;
 @Entity
 public class Role {
     @Id
-    int roleId;
+    String roleId;
     String role;
 
     /**

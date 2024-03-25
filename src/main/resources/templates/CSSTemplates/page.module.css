@@ -19,9 +19,9 @@
     box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
 }
 
-h2 {
+.h2title {
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 50px;
     color: #333333;
 }
 
@@ -30,7 +30,7 @@ h2 {
     flex-direction: column;
 }
 
-.mb-4 {
+.champ {
     margin-bottom: 20px;
 }
 
@@ -57,21 +57,23 @@ h2 {
 }
 
 
-label {
+.label {
     font-size: 16px;
     font-weight: bold;
     color: #555555;
 }
 
 input[type="text"],
+input[type="password"],
 .select-component {
-    width: 100%;
+    width: 94%;
     padding: 12px;
     border: 1px solid #cccccc;
     border-radius: 5px;
     outline: none;
     font-size: 16px;
-    margin-top: 8px;
+    margin-top: 6px;
+
 }
 
 button {

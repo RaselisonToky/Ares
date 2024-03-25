@@ -24,8 +24,7 @@ import java.util.List;
 @DiscriminatorColumn(name = "dtype", discriminatorType = DiscriminatorType.STRING)
 public class BasicUser {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int userId;
+    String userId;
     String firstName;
     String lastName;
     String email;

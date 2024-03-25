@@ -58,8 +58,13 @@ const Update${entityName} = () => {
 
 
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+    const handleSubmit = async () => {
+        const token = localStorage.getItem('token');
+        const axiosConfig = {
+            headers: {
+                'Authorization': 'Bearer ' + token
+            }
+        };
         try {
             const new${entityName} = {
             <#list fields as field >
@@ -70,7 +75,7 @@ const Update${entityName} = () => {
                 </#if>
             </#list>
             };
-            await axios.put(`${'$'}{process.env.REACT_APP_API}/api/v1/${entityName?lower_case}s/update/${'$'}{itemId}`, new${entityName});
+            await axios.put(`${'$'}{process.env.REACT_APP_API}/api/v1/${entityName?lower_case}s/update/${'$'}{itemId}`, new${entityName}, axiosConfig);
         } catch (error) {
             console.error('Error updating item:', error);
         }
@@ -79,7 +84,7 @@ const Update${entityName} = () => {
     return (
         <div className={styles.super_container}>
             <div className={styles.container}>
-                <h1>Modifier l'élément</h1>
+                <h2 className={styles.h2title} >Modifier l'élément</h2>
                 <form onSubmit={handleSubmit} className={styles.formgroup}>
                     <#list fields as field>
                             <#if field.isArmagedon == "true">
@@ -102,8 +107,8 @@ const Update${entityName} = () => {
                             <#elseif field.name?contains("_id")>
 
                             <#else >
-                                <div className={styles.mb_4}>
-                                    <label for="${field.name}">${field.name?capitalize}</label>
+                                <div className={styles.champ}>
+                                    <label for="${field.name}" className={styles.label}>${field.name?capitalize}</label>
                                     <input
                                         type="text"
                                         id="${field.name}"

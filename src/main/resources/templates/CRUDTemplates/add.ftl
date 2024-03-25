@@ -10,6 +10,7 @@ function Add${entityName}() {
     <#if field.isArmagedon == "true">
         const [${field.name}, set${field.name?cap_first}] = useState([]);
         const [selected${field.name?cap_first}, setSelected${field.name?cap_first}] = useState(null);
+    <#elseif field.name?contains("_id")>
     <#else>
         const [${field.name}, set${field.name?cap_first}] = useState();
     </#if>
@@ -18,7 +19,13 @@ function Add${entityName}() {
 <#list fields as field>
     <#if field.isArmagedon == "true">
     useEffect(() => {
-        axios.get(`${'$'}{process.env.REACT_APP_API}/api/v1/${field.name}s`)
+        const token = localStorage.getItem('token');
+        const axiosConfig = {
+            headers: {
+            'Authorization': 'Bearer ' + token
+            }
+        };
+        axios.get(`${'$'}{process.env.REACT_APP_API}/api/v1/${field.name}s`, axiosConfig)
             .then(response => set${field.name?capitalize}(response.data))
             .catch(error => console.error('Error fetching ${field.name}:', error));
         }, []);
@@ -40,7 +47,8 @@ function Add${entityName}() {
         <#list fields as field >
             <#if field.isArmagedon == "true">
                 ${field.name} : selected${field.name?cap_first}.value,
-            <#else>
+            <#elseif field.name?contains("_id")>
+            <#else >
                 ${field.name},
             </#if>
         </#list>
@@ -59,7 +67,7 @@ function Add${entityName}() {
 return (
     <div className={styles.super_container}>
         <div  className={styles.container}>
-            <h2>Ajouter ${entityName}</h2>
+            <h2 className={styles.h2title}>Ajouter ${entityName}</h2>
             <form onSubmit={handleSubmit} className={styles.formgroup}>
                 <#list fields as field>
                         <#if field.isArmagedon == "true">
@@ -81,8 +89,8 @@ return (
                         <#elseif field.name?contains("_id")>
 
                         <#else >
-                            <div className={styles.mb_4}>
-                                <label for="${field.name}">${field.name?capitalize}</label>
+                            <div className={styles.champ}>
+                                <label for="${field.name}" className={styles.label}>${field.name?capitalize}</label>
                                             <input
                                         type="text"
                                         id="${field.name}"
